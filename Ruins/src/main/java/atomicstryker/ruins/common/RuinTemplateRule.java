@@ -1070,7 +1070,12 @@ public class RuinTemplateRule
             if (itemDataWithoutNBT.startsWith("ChestGenHook:")) // ChestGenHook:dungeonChest:5
             {
                 String[] input = itemDataWithoutNBT.split(":");
-                ResourceLocation lootTable = new ResourceLocation("minecraft", input[1]);
+                if (input.length > 3)
+                {
+                    input[1] = String.join(":", input[1], input[2]);
+                    // note "target count" is unused here, yet must be present to avoid ambiguity
+                }
+                ResourceLocation lootTable = new ResourceLocation(input[1]);
                 LootTable loottable = world.getLootTableManager().getLootTableFromLocation(lootTable);
                 LootContext.Builder lootcontext$builder = new LootContext.Builder((WorldServer) world);
                 loottable.fillInventory((IInventory) te, random, lootcontext$builder.build());
